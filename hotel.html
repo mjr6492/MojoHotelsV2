@@ -471,5 +471,34 @@ function showSignIn(e) {
     };
 </script>
 <script type='text/javascript' src='https://trailsignup-8abfaa1f7d18d0.my.site.com/ESWMojoHotelsChat1790510675321/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+<script>
+(function() {
+    function logAnonId() {
+        if (window.SalesforceInteractions && typeof SalesforceInteractions.getAnonymousId === 'function') {
+            console.log('SF Personalization Anonymous ID:', SalesforceInteractions.getAnonymousId());
+        } else {
+            console.warn('SalesforceInteractions SDK not ready yet');
+        }
+    }
+
+    function attachToChatButton() {
+        var btn = document.querySelector('.embeddedMessagingConversationButton');
+        if (btn) {
+            btn.addEventListener('click', logAnonId);
+            return true;
+        }
+        return false;
+    }
+
+    window.addEventListener('onEmbeddedMessagingReady', function() {
+        if (!attachToChatButton()) {
+            var observer = new MutationObserver(function(_, obs) {
+                if (attachToChatButton()) obs.disconnect();
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+    });
+})();
+</script>
 </body>
 </html>
