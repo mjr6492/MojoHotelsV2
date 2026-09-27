@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>Mojo Hotel Group — Luxury Hotels & Resorts</title>
+<script src="https://cdn.c360a.salesforce.com/beacon/c360a/2c563b60-d3d9-40d2-8fc8-9532c3b306fa/scripts/c360a.min.js"></script>
+
+
+<style>
+:root {
+  --gold:      #C9A96E;
+  --gold-lt:   #E8D5B0;
+  --gold-dk:   #9E7A45;
+  --dark:      #1A1A1A;
+  --mid:       #2C2C2C;
+  --muted:     #6B6B6B;
+  --cream:     #FAF7F2;
+  --cream-dk:  #F0EAE0;
+  --white:     #FFFFFF;
+  --serif:     'Garamond','EB Garamond',Georgia,serif;
+  --sans:      'Gill Sans','Gill Sans MT',Calibri,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--white);color:var(--dark)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;width:100%;z-index:100;
+  background:rgba(26,26,26,0.95);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:68px;border-bottom:1px solid rgba(201,169,110,0.25);
+}
+.nav-logo{
+  font-family:var(--serif);font-size:20px;letter-spacing:3px;
+  color:var(--gold);text-decoration:none;text-transform:uppercase;
+}
+.nav-logo span{display:block;font-size:9px;letter-spacing:5px;color:var(--gold-lt);margin-top:2px;font-family:var(--sans)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{
+  color:var(--cream);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;opacity:.8;transition:opacity .2s,color .2s;
+}
+.nav-links a:hover{opacity:1;color:var(--gold)}
+.nav-cta{
+  background:var(--gold);color:var(--dark)!important;opacity:1!important;
+  padding:8px 20px;font-size:10px!important;letter-spacing:2px;
+}
+.nav-cta:hover{background:var(--gold-dk)!important}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#0d1117 0%,#1a1a1a 40%,#2c1f0e 100%);
+}
+.hero-img{
+  position:absolute;inset:0;
+  background:url('https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg') center/cover no-repeat;
+  opacity:.28;
+}
+.hero-content{position:relative;text-align:center;padding:120px 24px 48px}
+.hero-eyebrow{font-size:10px;letter-spacing:6px;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
+.hero-title{
+  font-family:var(--serif);font-size:clamp(40px,6vw,72px);color:var(--white);
+  line-height:1.1;margin-bottom:16px;
+}
+.hero-sub{font-size:14px;color:var(--gold-lt);letter-spacing:2px;margin-bottom:48px}
+
+/* ── SEARCH FORM ── */
+.search-box{
+  background:rgba(255,255,255,0.07);backdrop-filter:blur(12px);
+  border:1px solid rgba(201,169,110,0.3);
+  padding:24px 28px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;
+  max-width:860px;width:100%;
+}
+.field{display:flex;flex-direction:column;flex:1;min-width:140px}
+.field label{font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.field input,.field select{
+  background:transparent;border:none;border-bottom:1px solid rgba(201,169,110,0.4);
+  color:var(--white);font-family:var(--sans);font-size:13px;padding:6px 0;outline:none;
+  transition:border-color .2s;
+}
+.field input:focus,.field select:focus{border-color:var(--gold)}
+.field input::placeholder{color:rgba(255,255,255,0.3)}
+.field select option{background:var(--dark);color:var(--white)}
+.search-btn{
+  background:var(--gold);color:var(--dark);border:none;
+  font-family:var(--sans);font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  padding:12px 28px;cursor:pointer;transition:background .2s;white-space:nowrap;
+}
+.search-btn:hover{background:var(--gold-dk)}
+
+.trust-row{display:flex;gap:40px;justify-content:center;margin-top:32px;flex-wrap:wrap}
+.trust-item{text-align:center}
+.trust-item .icon{font-size:18px;margin-bottom:6px;color:var(--gold)}
+.trust-item span{display:block;font-size:10px;letter-spacing:2px;color:var(--gold-lt);text-transform:uppercase}
+
+/* ── SECTIONS ── */
+section{padding:80px 48px}
+.section-eyebrow{font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.section-title{font-family:var(--serif);font-size:clamp(28px,3vw,42px);color:var(--dark);margin-bottom:8px}
+.section-sub{font-size:13px;color:var(--muted);max-width:560px;margin-bottom:40px;line-height:1.7}
+
+/* ── HOTELS GRID ── */
+#hotels{background:var(--cream)}
+.hotels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+.hotel-card{
+  background:var(--white);cursor:pointer;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;text-decoration:none;color:inherit;display:block;
+}
+.hotel-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.12)}
+.card-img{
+  height:220px;overflow:hidden;position:relative;
+}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.hotel-card:hover .card-img img{transform:scale(1.05)}
+.card-tag{
+  position:absolute;top:12px;left:12px;
+  background:var(--gold);color:var(--dark);
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;
+}
+.card-body{padding:20px}
+.card-name{font-family:var(--serif);font-size:18px;color:var(--dark);margin-bottom:4px}
+.card-loc{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.card-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--cream-dk);padding-top:14px}
+.card-price{font-size:11px;color:var(--muted)}
+.card-price strong{font-family:var(--serif);font-size:16px;color:var(--dark)}
+.card-link{
+  font-size:10px;letter-spacing:2px;color:var(--gold-dk);text-transform:uppercase;
+  border-bottom:1px solid currentColor;padding-bottom:2px;
+}
+
+/* ── OFFERS ── */
+#offers{background:var(--dark)}
+#offers .section-title{color:var(--white)}
+#offers .section-sub{color:rgba(255,255,255,0.5)}
+.offers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+.offer-card{position:relative;overflow:hidden;cursor:pointer}
+.offer-img{height:240px;overflow:hidden}
+.offer-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;filter:brightness(.7)}
+.offer-card:hover .offer-img img{transform:scale(1.05)}
+.offer-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(26,26,26,.95) 0%,transparent 60%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:24px;
+}
+.offer-badge{
+  position:absolute;top:16px;right:16px;
+  background:var(--gold);color:var(--dark);
+  font-size:11px;font-weight:700;letter-spacing:1px;padding:6px 12px;
+}
+.offer-tag{font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.offer-title{font-family:var(--serif);font-size:20px;color:var(--white);margin-bottom:6px}
+.offer-desc{font-size:11px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:10px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.offer-validity{font-size:9px;letter-spacing:2px;color:var(--gold-lt);text-transform:uppercase}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--mid);padding:60px 48px 32px;
+  display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px;
+}
+.footer-brand a{
+  font-family:var(--serif);font-size:18px;letter-spacing:3px;
+  color:var(--gold);text-decoration:none;text-transform:uppercase;
+}
+.footer-brand p{font-size:12px;color:rgba(255,255,255,.4);line-height:1.8;margin-top:12px;max-width:280px}
+.footer-col h4{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.footer-col a{display:block;font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:8px;transition:color .2s}
+.footer-col a:hover{color:var(--gold)}
+.footer-subscribe h4{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.footer-subscribe p{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:16px;line-height:1.6}
+.subscribe-row{display:flex}
+.subscribe-row input{
+  flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(201,169,110,.3);
+  color:var(--white);font-family:var(--sans);font-size:12px;padding:10px 14px;outline:none;
+}
+.subscribe-row input::placeholder{color:rgba(255,255,255,.25)}
+.subscribe-row button{
+  background:var(--gold);color:var(--dark);border:none;
+  font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  padding:10px 16px;cursor:pointer;transition:background .2s;
+}
+.subscribe-row button:hover{background:var(--gold-dk)}
+.footer-bottom{
+  grid-column:1/-1;border-top:1px solid rgba(255,255,255,.06);
+  padding-top:24px;display:flex;justify-content:space-between;align-items:center;
+}
+.footer-bottom p{font-size:11px;color:rgba(255,255,255,.25)}
+
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    Mojo Hotel Group
+    <span>Hotels &amp; Resorts</span>
+  </a>
+  <div class="nav-links">
+    <a href="#hotels">Hotels</a>
+    <a href="#offers">Offers</a>
+    <a href="#" onclick="showSignIn(event)">Mojo One</a>
+    <a href="#" class="nav-cta" onclick="showSignIn(event)">Sign In</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-img"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Est. 1934 · India's Finest</div>
+    <h1 class="hero-title">Extraordinary<br>Stays Await</h1>
+    <p class="hero-sub">Discover 10 iconic properties across India's most magnificent destinations</p>
+
+    <div class="search-box">
+      <div class="field">
+        <label>Destination</label>
+        <input type="text" id="s-dest" placeholder="Agra, Delhi, Udaipur…">
+      </div>
+      <div class="field">
+        <label>Check In</label>
+        <input type="date" id="s-in">
+      </div>
+      <div class="field">
+        <label>Check Out</label>
+        <input type="date" id="s-out">
+      </div>
+      <div class="field" style="min-width:100px;max-width:120px">
+        <label>Guests</label>
+        <select id="s-guests">
+          <option value="1">1 Guest</option>
+          <option value="2" selected>2 Guests</option>
+          <option value="3">3 Guests</option>
+          <option value="4">4 Guests</option>
+          <option value="5">5 Guests</option>
+          <option value="6">6 Guests</option>
+        </select>
+      </div>
+      <button class="search-btn" onclick="doSearch()">Search</button>
+    </div>
+
+    <div class="trust-row">
+      <div class="trust-item"><div class="icon">✦</div><span>Best Rate Guarantee</span></div>
+      <div class="trust-item"><div class="icon">✦</div><span>Free Cancellation</span></div>
+      <div class="trust-item"><div class="icon">✦</div><span>24-Hour Butler</span></div>
+      <div class="trust-item"><div class="icon">✦</div><span>Mojo One Rewards</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURED HOTELS ───────────────────────────────────────────────────── -->
+<section id="hotels">
+  <div class="section-eyebrow">Our Collection</div>
+  <h2 class="section-title">Iconic Properties</h2>
+  <p class="section-sub">Each Mojo property is built around a singular idea — that the finest details of Indian culture, art, and landscape can be woven into every moment of your stay.</p>
+  <div class="hotels-grid" id="hotels-grid"></div>
+</section>
+
+<!-- ── SPECIAL OFFERS ────────────────────────────────────────────────────── -->
+<section id="offers">
+  <div class="section-eyebrow">Exclusive Offers</div>
+  <h2 class="section-title" style="color:var(--white)">Curated Privileges</h2>
+  <p class="section-sub" style="color:rgba(255,255,255,.45)">Member-exclusive rates, seasonal packages, and once-in-a-lifetime experiences crafted for the discerning traveller.</p>
+  <div class="offers-grid" id="offers-grid"></div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">
+    <a href="index.html">Mojo Hotel Group</a>
+    <p>For over 85 years, Mojo Hotel Group has set the standard for luxury hospitality in India, offering unparalleled service and iconic destinations.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Explore</h4>
+    <a href="#hotels">Our Hotels</a>
+    <a href="#offers">Offers</a>
+    <a href="#">Spa &amp; Wellness</a>
+    <a href="#">Dining</a>
+    <a href="#">Experiences</a>
+  </div>
+  <div class="footer-col">
+    <h4>Support</h4>
+    <a href="#">Contact Us</a>
+    <a href="#">Cancellation Policy</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">FAQs</a>
+  </div>
+  <div class="footer-subscribe">
+    <h4>Mojo One Newsletter</h4>
+    <p>Receive exclusive offers and curated travel inspiration directly in your inbox.</p>
+    <div class="subscribe-row">
+      <input type="email" id="footer-email" placeholder="Your email address">
+      <button onclick="footerSubscribe()">Join</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Mojo Hotel Group Ltd. Demo site for Salesforce Personalization.</p>
+    <p>Powered by Salesforce Personalization</p>
+  </div>
+</footer>
+
+
+<script>
+var HOTELS = [
+  { id:'hotels-in-agra-amarvilas-resort',                  name:'Mojo Amarvilas',          city:'Agra',           region:'Rajasthan',  type:'Heritage Resort',   stars:5, price:45000, tag:'Iconic',    image:'https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg',                                         desc:'Uninterrupted Taj Mahal views from every room. Mughal-inspired architecture with manicured gardens and reflecting pools.' },
+  { id:'hotels-in-delhi',                                  name:'Mojo New Delhi',           city:'New Delhi',      region:'Delhi NCR',  type:'City Hotel',        stars:5, price:35000, tag:'Business',  image:'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tomb_of_Humayun%2C_Delhi.jpg',                                          desc:'Contemporary luxury overlooking Delhi Golf Course and Humayun\'s Tomb. Recognised as one of the world\'s best hotels.' },
+  { id:'hotels-in-udaipur-udaivilas-resort',               name:'Mojo Udaivilas',           city:'Udaipur',        region:'Rajasthan',  type:'Lake Palace Resort',stars:5, price:55000, tag:'Romantic',  image:'https://upload.wikimedia.org/wikipedia/commons/7/74/20191207_Lake_Pichola%2C_City_Palace%2C_Udaipur%2C_1516_7254.jpg',       desc:'Palatial resort on the banks of Lake Pichola with views of the City Palace, private pools and hand-carved marble.' },
+  { id:'hotels-in-jaipur-rajvilas-resort',                 name:'Mojo Rajvilas',            city:'Jaipur',         region:'Rajasthan',  type:'Garden Resort',     stars:5, price:50000, tag:'Heritage',  image:'https://upload.wikimedia.org/wikipedia/commons/f/f7/Jaipur_03-2016_02_Amber_Fort.jpg',                                     desc:'32 acres of lush gardens in the Pink City with luxurious villas, tented accommodation and a Mughal-inspired pool.' },
+  { id:'hotels-in-mumbai',                                 name:'Mojo Mumbai',              city:'Mumbai',         region:'West Coast', type:'City Hotel',        stars:5, price:38000, tag:'Iconic',    image:'https://upload.wikimedia.org/wikipedia/commons/0/0e/Mumbai_03-2016_46_evening_at_Marine_Drive.jpg',                        desc:'Iconic tower overlooking the Arabian Sea and the Queen\'s Necklace. Award-winning restaurants and panoramic views of Marine Drive.' },
+  { id:'hotels-in-ranthambhore-vanyavilas-resort',         name:'Mojo Vanyavilas',          city:'Ranthambhore',   region:'Wildlife',   type:'Tented Camp',       stars:5, price:65000, tag:'Wildlife',  image:'https://upload.wikimedia.org/wikipedia/commons/1/18/Tiger_at_Ranthambhore_National_Park_01.jpg',                          desc:'Ultra-luxury tented camp on the edge of Ranthambhore National Park. Each tent has a private garden and antique furnishings.' },
+  { id:'hotels-in-bengaluru',                              name:'Mojo Bengaluru',           city:'Bengaluru',      region:'South India',type:'City Hotel',        stars:5, price:25000, tag:'Urban',     image:'https://upload.wikimedia.org/wikipedia/commons/e/e9/Lalbagh%2C_Bengaluru-6.jpg',                                            desc:'Urban sanctuary in the heart of Bengaluru with award-winning Asian restaurants and a serene pool garden.' },
+  { id:'hotels-in-bandhavgarh-vindhyavilas-resort',        name:'Mojo Vindhyavilas',        city:'Bandhavgarh',    region:'Wildlife',   type:'Tented Camp',       stars:5, price:70000, tag:'Wildlife',  image:'https://upload.wikimedia.org/wikipedia/commons/1/18/Tiger_at_Ranthambhore_National_Park_01.jpg',                          desc:'Luxury tented camp bordering Bandhavgarh National Park, inspired by the hunting lodges of the Maharajas.' },
+  { id:'hotels-in-chandigarh-sukhvilas-resort',            name:'Mojo Sukhvilas',           city:'New Chandigarh', region:'Himalaya',   type:'Wilderness Resort', stars:5, price:42000, tag:'Nature',    image:'https://upload.wikimedia.org/wikipedia/commons/e/e9/Lalbagh%2C_Bengaluru-6.jpg',                                            desc:'Sprawling resort set in 8000 acres of a wildlife reserve. Features a natural stream pool and outdoor spa pavilions.' },
+  { id:'hotels-in-shimla-wfh',                             name:'Wildflower Hall',                city:'Shimla',         region:'Himalaya',   type:'Mountain Retreat',  stars:5, price:48000, tag:'Mountains', image:'https://upload.wikimedia.org/wikipedia/commons/f/f7/Jaipur_03-2016_02_Amber_Fort.jpg',                                     desc:'Breathtaking mountain retreat at 8250 feet in the Himalayas. Former residence of Lord Kitchener, surrounded by cedar forests.' },
+];
+
+var OFFERS = [
+  { title:'Early Summer Escape',    discount:'20% Off',        validity:'Valid through Dec 2026', desc:'Save 20% on stays of 3 nights or more at all Rajasthan properties. Includes daily breakfast and a complimentary spa credit.',  tag:'Rajasthan', image:'https://upload.wikimedia.org/wikipedia/commons/f/f7/Jaipur_03-2016_02_Amber_Fort.jpg' },
+  { title:'Wildlife Season Package', discount:'3rd Night Free', validity:'Valid Oct–Mar 2026',    desc:'Book any two nights at Vanyavilas or Vindhyavilas and receive your third night complimentary, including all meals and safari.',  tag:'Wildlife',  image:'https://upload.wikimedia.org/wikipedia/commons/1/18/Tiger_at_Ranthambhore_National_Park_01.jpg' },
+  { title:'Urban Luxury Weekend',   discount:'15% Off',        validity:'Valid Fri–Sun stays',    desc:'Exclusive weekend rates at Mojo New Delhi and Mojo Mumbai. Late checkout until 4pm included.',                      tag:'City',      image:'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tomb_of_Humayun%2C_Delhi.jpg' },
+];
+
+function fmt(n) { return '₹' + n.toLocaleString('en-IN'); }
+
+// ── Render hotels grid
+(function () {
+  var grid = document.getElementById('hotels-grid');
+  HOTELS.forEach(function (h) {
+    var a = document.createElement('a');
+    a.href      = 'hotel.html?id=' + h.id;
+    a.className = 'hotel-card';
+    a.innerHTML = '<div class="card-img"><img src="'+h.image+'" alt="'+h.name+'" loading="lazy"><div class="card-tag">'+h.tag+'</div></div>'
+      + '<div class="card-body"><div class="card-name">'+h.name+'</div><div class="card-loc">'+h.city+' · '+h.region+'</div>'
+      + '<div class="card-desc">'+h.desc+'</div><div class="card-footer">'
+      + '<div class="card-price">From <strong>'+fmt(h.price)+'</strong>/night</div>'
+      + '<div class="card-link">View Hotel</div></div></div>';
+    grid.appendChild(a);
+  });
+})();
+
+// ── Render offers
+(function () {
+  var grid = document.getElementById('offers-grid');
+  OFFERS.forEach(function (o) {
+    var div = document.createElement('div');
+    div.className = 'offer-card';
+    div.innerHTML = '<div class="offer-img"><img src="'+o.image+'" alt="'+o.title+'" loading="lazy"></div>'
+      + '<div class="offer-overlay"><div class="offer-badge">'+o.discount+'</div>'
+      + '<div class="offer-tag">'+o.tag+'</div><div class="offer-title">'+o.title+'</div>'
+      + '<div class="offer-desc">'+o.desc+'</div><div class="offer-validity">'+o.validity+'</div></div>';
+    grid.appendChild(div);
+  });
+})();
+
+// ── Search
+function doSearch() {
+  var dest = document.getElementById('s-dest').value.trim();
+  if (!dest) { alert('Please enter a destination.'); return; }
+  document.getElementById('hotels').scrollIntoView({ behavior:'smooth' });
+}
+
+// ── Sign In
+function showSignIn(e) {
+  e.preventDefault();
+  var email = prompt('Enter your email address to sign in:');
+  if (email && email.includes('@')) {
+    alert('Welcome back! You are now signed in as ' + email);
+  }
+}
+
+// ── Footer subscribe
+function footerSubscribe() {
+  var email = document.getElementById('footer-email').value.trim();
+  if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
+  alert('Thank you for joining Mojo One!');
+}
+
+</script>
+
+<script type='text/javascript'>
+    function initEmbeddedMessaging() {
+        try {
+            embeddedservice_bootstrap.settings.language = 'en_US';
+            embeddedservice_bootstrap.init(
+                '00Dfj00000flsNk',
+                'Service_Agent_Channel',
+                'https://trailsignup-8abfaa1f7d18d0.my.site.com/ESWServiceAgentChannel1790335805223',
+                {
+                    scrt2URL: 'https://trailsignup-8abfaa1f7d18d0.my.salesforce-scrt.com'
+                }
+            );
+        } catch (err) {
+            console.error('Error loading Embedded Messaging: ', err);
+        }
+    };
+</script>
+<script type='text/javascript' src='https://trailsignup-8abfaa1f7d18d0.my.site.com/ESWServiceAgentChannel1790335805223/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+</body>
+</html>

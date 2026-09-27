@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>Hotel — Mojo Hotel Group</title>
+<script src="https://cdn.c360a.salesforce.com/beacon/c360a/2c563b60-d3d9-40d2-8fc8-9532c3b306fa/scripts/c360a.min.js"></script>
+
+
+<style>
+:root{
+  --gold:#C9A96E;--gold-lt:#E8D5B0;--gold-dk:#9E7A45;
+  --dark:#1A1A1A;--mid:#2C2C2C;--muted:#6B6B6B;
+  --cream:#FAF7F2;--cream-dk:#F0EAE0;--white:#FFFFFF;
+  --serif:'Garamond','EB Garamond',Georgia,serif;
+  --sans:'Gill Sans','Gill Sans MT',Calibri,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--white);color:var(--dark)}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;width:100%;z-index:100;
+  background:rgba(26,26,26,0.95);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:68px;border-bottom:1px solid rgba(201,169,110,0.25);
+}
+.nav-logo{font-family:var(--serif);font-size:20px;letter-spacing:3px;color:var(--gold);text-decoration:none;text-transform:uppercase}
+.nav-logo span{display:block;font-size:9px;letter-spacing:5px;color:var(--gold-lt);margin-top:2px;font-family:var(--sans)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{color:var(--cream);font-size:11px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;opacity:.8;transition:opacity .2s,color .2s}
+.nav-links a:hover{opacity:1;color:var(--gold)}
+.nav-cta{background:var(--gold);color:var(--dark)!important;opacity:1!important;padding:8px 20px;font-size:10px!important;letter-spacing:2px}
+.nav-cta:hover{background:var(--gold-dk)!important}
+
+/* HERO */
+#hotel-hero{
+  min-height:70vh;display:flex;align-items:flex-end;position:relative;overflow:hidden;
+  background:var(--dark);
+}
+#hero-bg{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  transition:opacity 1s;
+}
+.hero-gradient{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(26,26,26,1) 0%,rgba(26,26,26,.4) 50%,transparent 100%);
+}
+.hero-info{
+  position:relative;padding:0 48px 48px;width:100%;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;
+}
+.hero-left{}
+.hero-eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.hero-name{font-family:var(--serif);font-size:clamp(32px,5vw,60px);color:var(--white);margin-bottom:6px}
+.hero-loc{font-size:12px;letter-spacing:3px;color:var(--gold-lt);text-transform:uppercase}
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.hero-price{text-align:right}
+.hero-price small{display:block;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.45);text-transform:uppercase;margin-bottom:4px}
+.hero-price strong{font-family:var(--serif);font-size:28px;color:var(--white)}
+.hero-price span{font-size:11px;color:rgba(255,255,255,.45)}
+.book-btn{
+  background:var(--gold);color:var(--dark);border:none;
+  font-family:var(--sans);font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  padding:14px 32px;cursor:pointer;transition:background .2s;
+}
+.book-btn:hover{background:var(--gold-dk)}
+.region-badge{
+  background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.3);
+  color:var(--gold);font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:4px 12px;
+  align-self:flex-end;
+}
+
+/* SECTION LAYOUT */
+.content{padding:72px 48px 48px}
+.sec-eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.sec-title{font-family:var(--serif);font-size:clamp(24px,3vw,36px);color:var(--dark);margin-bottom:6px}
+.sec-sub{font-size:13px;color:var(--muted);margin-bottom:32px;line-height:1.7;max-width:600px}
+.gold-rule{height:1px;background:linear-gradient(to right,var(--gold),transparent);margin:64px 0}
+
+/* ABOUT */
+#hotel-about{background:var(--cream);padding:64px 48px}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.about-img{height:360px;overflow:hidden}
+.about-img img{width:100%;height:100%;object-fit:cover}
+.about-text .sec-title{margin-bottom:16px}
+.about-desc{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:24px}
+.about-stats{display:flex;gap:32px;margin-top:24px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-val{font-family:var(--serif);font-size:28px;color:var(--gold)}
+.stat-label{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:4px}
+
+/* ROOMS */
+#rooms-section{background:var(--white)}
+.rooms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+.room-card{border:1px solid var(--cream-dk);overflow:hidden;transition:box-shadow .3s}
+.room-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.room-img{height:180px;overflow:hidden}
+.room-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.room-card:hover .room-img img{transform:scale(1.04)}
+.room-body{padding:18px}
+.room-tier{display:flex;gap:4px;margin-bottom:8px}
+.tier-dot{width:7px;height:7px;border-radius:50%;background:var(--cream-dk)}
+.tier-dot.on{background:var(--gold)}
+.room-name{font-family:var(--serif);font-size:16px;color:var(--dark);margin-bottom:6px}
+.room-desc{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.room-footer{display:flex;align-items:center;justify-content:space-between}
+.room-price{font-size:11px;color:var(--muted)}
+.room-price strong{font-family:var(--serif);font-size:15px;color:var(--dark)}
+.book-room{
+  background:none;border:1px solid var(--gold-dk);color:var(--gold-dk);
+  font-family:var(--sans);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:6px 14px;cursor:pointer;transition:all .2s;
+}
+.book-room:hover{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.upgrade-badge{
+  background:rgba(201,169,110,.12);border:1px solid rgba(201,169,110,.3);
+  color:var(--gold-dk);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 8px;margin-bottom:8px;display:inline-block;
+}
+
+/* DINING */
+#dining-section{background:var(--cream)}
+.dining-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.dining-card{background:var(--white);overflow:hidden;transition:box-shadow .3s}
+.dining-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.dining-img{height:160px;overflow:hidden}
+.dining-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.dining-card:hover .dining-img img{transform:scale(1.04)}
+.dining-body{padding:16px}
+.dining-name{font-family:var(--serif);font-size:16px;color:var(--dark);margin-bottom:4px}
+.dining-price{font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.dining-desc{font-size:11px;color:var(--muted);line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* SPA */
+#spa-section{background:var(--dark)}
+#spa-section .sec-title{color:var(--white)}
+#spa-section .sec-sub{color:rgba(255,255,255,.45)}
+.spa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.spa-card{background:rgba(255,255,255,.04);border:1px solid rgba(201,169,110,.15);overflow:hidden;transition:border-color .3s}
+.spa-card:hover{border-color:var(--gold-dk)}
+.spa-img{height:160px;overflow:hidden}
+.spa-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.85);transition:transform .5s}
+.spa-card:hover .spa-img img{transform:scale(1.04)}
+.spa-body{padding:16px}
+.spa-name{font-family:var(--serif);font-size:15px;color:var(--white);margin-bottom:4px}
+.spa-price{font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.spa-desc{font-size:11px;color:rgba(255,255,255,.45);line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+
+/* FOOTER */
+footer{
+  background:var(--mid);padding:48px;
+  display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;
+}
+.footer-brand a{font-family:var(--serif);font-size:18px;letter-spacing:3px;color:var(--gold);text-decoration:none;text-transform:uppercase}
+.footer-brand p{font-size:12px;color:rgba(255,255,255,.4);line-height:1.8;margin-top:10px;max-width:260px}
+.footer-bottom{width:100%;border-top:1px solid rgba(255,255,255,.06);padding-top:20px;display:flex;justify-content:space-between}
+.footer-bottom p{font-size:11px;color:rgba(255,255,255,.25)}
+
+/* Empty state */
+.empty{padding:80px;text-align:center;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    Mojo Hotel Group
+    <span>Hotels &amp; Resorts</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#hotels">Hotels</a>
+    <a href="index.html#offers">Offers</a>
+    <a href="#" onclick="showSignIn(event)">Mojo One</a>
+    <a href="#" class="nav-cta" onclick="showSignIn(event)">Sign In</a>
+  </div>
+</nav>
+
+<!-- ── HOTEL HERO ── -->
+<section id="hotel-hero">
+  <div id="hero-bg"></div>
+  <div class="hero-gradient"></div>
+  <div class="hero-info">
+    <div class="hero-left">
+      <div class="hero-eyebrow" id="hero-type">Luxury Resort</div>
+      <div class="hero-name" id="hero-name">Loading…</div>
+      <div class="hero-loc" id="hero-loc"></div>
+    </div>
+    <div class="hero-right">
+      <div class="region-badge" id="hero-region"></div>
+      <div class="hero-price">
+        <small>Rooms from</small>
+        <strong id="hero-price">₹0</strong>
+        <span>/night</span>
+      </div>
+      <button class="book-btn">Book Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="hotel-about">
+  <div class="about-grid">
+    <div class="about-img"><img id="about-img" src="" alt=""></div>
+    <div class="about-text">
+      <div class="sec-eyebrow">The Property</div>
+      <div class="sec-title" id="about-title">Hotel Name</div>
+      <div class="about-desc" id="about-desc"></div>
+      <div class="about-stats">
+        <div class="stat"><div class="stat-val">5 ★</div><div class="stat-label">Rating</div></div>
+        <div class="stat"><div class="stat-val" id="stat-rooms">—</div><div class="stat-label">Room Types</div></div>
+        <div class="stat"><div class="stat-val" id="stat-dining">—</div><div class="stat-label">Restaurants</div></div>
+        <div class="stat"><div class="stat-val" id="stat-spa">—</div><div class="stat-label">Spa Treatments</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ROOMS ── -->
+<section id="rooms-section" class="content">
+  <div class="sec-eyebrow">Accommodation</div>
+  <h2 class="sec-title">Rooms &amp; Suites</h2>
+  <p class="sec-sub" id="rooms-sub">Each room is designed to immerse you in the unique spirit of this destination.</p>
+  <div class="rooms-grid" id="rooms-grid"></div>
+</section>
+
+<div class="gold-rule" style="margin:0 48px"></div>
+
+<!-- ── DINING ── -->
+<section id="dining-section" class="content" style="background:var(--cream);padding:64px 48px">
+  <div class="sec-eyebrow">Culinary Experiences</div>
+  <h2 class="sec-title">Dining</h2>
+  <p class="sec-sub">Award-winning restaurants and intimate bars crafted to celebrate the finest flavours.</p>
+  <div class="dining-grid" id="dining-grid">
+    <div class="empty">Loading dining…</div>
+  </div>
+</section>
+
+<!-- ── SPA ── -->
+<section id="spa-section" class="content" style="background:var(--dark);padding:64px 48px">
+  <div class="sec-eyebrow" style="color:var(--gold)">Wellness</div>
+  <h2 class="sec-title" style="color:var(--white)">Spa &amp; Wellness</h2>
+  <p class="sec-sub" style="color:rgba(255,255,255,.45)">Asmi by Mojo — rooted in ancient wisdom, redefined for the modern traveller.</p>
+  <div class="spa-grid" id="spa-grid">
+    <div class="empty" style="color:rgba(255,255,255,.3)">Loading spa treatments…</div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand">
+    <a href="index.html">Mojo Hotel Group</a>
+    <p>For over 85 years, Mojo Hotel Group has set the standard for luxury hospitality in India.</p>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Mojo Hotel Group Ltd. Demo site for Salesforce Personalization.</p>
+    <a href="index.html" style="color:var(--gold);font-size:11px;text-decoration:none;letter-spacing:2px">← Back to all hotels</a>
+  </div>
+</footer>
+
+<script>
+var HOTELS = [
+  { id:'hotels-in-agra-amarvilas-resort',           name:'Mojo Amarvilas',     city:'Agra',           region:'Rajasthan',  type:'Heritage Resort',   price:45000, image:'https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg',                                         desc:'Uninterrupted Taj Mahal views from every room. Mughal-inspired architecture with manicured gardens and reflecting pools.' },
+  { id:'hotels-in-delhi',                           name:'Mojo New Delhi',      city:'New Delhi',      region:'Delhi NCR',  type:'City Hotel',        price:35000, image:'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tomb_of_Humayun%2C_Delhi.jpg',                                          desc:'Contemporary luxury overlooking Delhi Golf Course and Humayun\'s Tomb. Recognised as one of the world\'s best hotels.' },
+  { id:'hotels-in-udaipur-udaivilas-resort',        name:'Mojo Udaivilas',      city:'Udaipur',        region:'Rajasthan',  type:'Lake Palace Resort',price:55000, image:'https://upload.wikimedia.org/wikipedia/commons/7/74/20191207_Lake_Pichola%2C_City_Palace%2C_Udaipur%2C_1516_7254.jpg',       desc:'Palatial resort on the banks of Lake Pichola with views of the City Palace, private pools and hand-carved marble.' },
+  { id:'hotels-in-jaipur-rajvilas-resort',          name:'Mojo Rajvilas',       city:'Jaipur',         region:'Rajasthan',  type:'Garden Resort',     price:50000, image:'https://upload.wikimedia.org/wikipedia/commons/f/f7/Jaipur_03-2016_02_Amber_Fort.jpg',                                     desc:'32 acres of lush gardens in the Pink City with luxurious villas, tented accommodation and a Mughal-inspired pool.' },
+  { id:'hotels-in-mumbai',                          name:'Mojo Mumbai',          city:'Mumbai',         region:'West Coast', type:'City Hotel',        price:38000, image:'https://upload.wikimedia.org/wikipedia/commons/0/0e/Mumbai_03-2016_46_evening_at_Marine_Drive.jpg',                        desc:'Iconic tower overlooking the Arabian Sea and the Queen\'s Necklace. Award-winning restaurants and panoramic views of Marine Drive.' },
+  { id:'hotels-in-ranthambhore-vanyavilas-resort',  name:'Mojo Vanyavilas',     city:'Ranthambhore',   region:'Wildlife',   type:'Tented Camp',       price:65000, image:'https://upload.wikimedia.org/wikipedia/commons/1/18/Tiger_at_Ranthambhore_National_Park_01.jpg',                          desc:'Ultra-luxury tented camp on the edge of Ranthambhore National Park. Each tent has a private garden and antique furnishings.' },
+  { id:'hotels-in-bengaluru',                       name:'Mojo Bengaluru',       city:'Bengaluru',      region:'South India',type:'City Hotel',        price:25000, image:'https://upload.wikimedia.org/wikipedia/commons/e/e9/Lalbagh%2C_Bengaluru-6.jpg',                                            desc:'Urban sanctuary in the heart of Bengaluru with award-winning Asian restaurants and a serene pool garden.' },
+  { id:'hotels-in-bandhavgarh-vindhyavilas-resort', name:'Mojo Vindhyavilas',   city:'Bandhavgarh',    region:'Wildlife',   type:'Tented Camp',       price:70000, image:'https://upload.wikimedia.org/wikipedia/commons/1/18/Tiger_at_Ranthambhore_National_Park_01.jpg',                          desc:'Luxury tented camp bordering Bandhavgarh National Park, inspired by the hunting lodges of the Maharajas.' },
+  { id:'hotels-in-chandigarh-sukhvilas-resort',     name:'Mojo Sukhvilas',      city:'New Chandigarh', region:'Himalaya',   type:'Wilderness Resort', price:42000, image:'https://upload.wikimedia.org/wikipedia/commons/e/e9/Lalbagh%2C_Bengaluru-6.jpg',                                            desc:'Sprawling resort set in 8000 acres of a wildlife reserve. Features a natural stream pool and outdoor spa pavilions.' },
+  { id:'hotels-in-shimla-wfh',                      name:'Wildflower Hall',            city:'Shimla',         region:'Himalaya',   type:'Mountain Retreat',  price:48000, image:'https://upload.wikimedia.org/wikipedia/commons/f/f7/Jaipur_03-2016_02_Amber_Fort.jpg',                                     desc:'Breathtaking mountain retreat at 8250 feet in the Himalayas. Former residence of Lord Kitchener, surrounded by cedar forests.' },
+];
+var ROOMS = [
+  { id:'agra-premier',         hotel:'hotels-in-agra-amarvilas-resort',    name:'Premier Room',                            tier:2, price:45000,  image:'https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg',                                         desc:'Mughal-inspired furnishings. Marble en-suite with walk-in wardrobe. Butler on call. All rooms frame the Taj Mahal.' },
+  { id:'agra-premier-balcony', hotel:'hotels-in-agra-amarvilas-resort',    name:'Premier Room with Balcony',               tier:3, price:55000,  image:'https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg',                                         desc:'Uninterrupted Taj Mahal views from a private balcony and from the bed. Butler in-room dining available.' },
+  { id:'agra-deluxe-suite',    hotel:'hotels-in-agra-amarvilas-resort',    name:'Deluxe Suite',                            tier:3, price:90000,  image:'https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg',                                         desc:'Large windows framing Taj views with a couples marble shower seat and generous living space.' },
+  { id:'agra-luxury-suite',    hotel:'hotels-in-agra-amarvilas-resort',    name:'Luxury Suite',                            tier:4, price:180000, image:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Swimming_pool_of_Khan_Pool_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg', desc:'Separate living and dining rooms. Octagonal rain shower and standalone tub. Private sun terrace.' },
+  { id:'agra-kohinoor',        hotel:'hotels-in-agra-amarvilas-resort',    name:'Kohinoor Suite',                          tier:5, price:350000, image:'https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg',                                         desc:'Gold domed ceilings, mirrored walls, white marble elephants. Panoramic Taj Mahal views.' },
+  { id:'delhi-deluxe',         hotel:'hotels-in-delhi',                    name:'Deluxe Room',                             tier:1, price:35000,  image:'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tomb_of_Humayun%2C_Delhi.jpg',                                          desc:'Large picture window with natural light and Lutyens-style furnishings.' },
+  { id:'delhi-luxury',         hotel:'hotels-in-delhi',                    name:'Luxury Room',                             tier:2, price:45000,  image:'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tomb_of_Humayun%2C_Delhi.jpg',                                          desc:'Higher floors with views of Humayun\'s Tomb or Delhi Golf Course.' },
+  { id:'delhi-premier',        hotel:'hotels-in-delhi',                    name:'Premier Room',                            tier:2, price:55000,  image:'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tomb_of_Humayun%2C_Delhi.jpg',                                          desc:'King bed with Italian marble bath and oak writing desk. Daily breakfast included.' },
+  { id:'delhi-mojo-suite',   hotel:'hotels-in-delhi',                    name:'Mojo Suite',                            tier:4, price:120000, image:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Swimming_pool_of_Khan_Pool_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg', desc:'Grand master bedroom with private living area. 24-hour butler included.' },
+  { id:'delhi-kohinoor',       hotel:'hotels-in-delhi',                    name:'Kohinoor Suite',                          tier:5, price:400000, image:'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tomb_of_Humayun%2C_Delhi.jpg',                                          desc:'Private sitting area, study, personal therapy room and private gym.' },
+  { id:'udaipur-premier',      hotel:'hotels-in-udaipur-udaivilas-resort', name:'Premier Room',                            tier:2, price:55000,  image:'https://upload.wikimedia.org/wikipedia/commons/7/74/20191207_Lake_Pichola%2C_City_Palace%2C_Udaipur%2C_1516_7254.jpg',       desc:'Uninterrupted garden views with king bed and marble en-suite.' },
+  { id:'udaipur-palace-pool',  hotel:'hotels-in-udaipur-udaivilas-resort', name:'Premier City Palace View with Semi-Private Pool', tier:3, price:140000, image:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Swimming_pool_of_Khan_Pool_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg', desc:'Spectacular views of Lake Pichola and the City Palace with a semi-private pool.' },
+  { id:'udaipur-kohinoor',     hotel:'hotels-in-udaipur-udaivilas-resort', name:'Kohinoor Suite with Private Pool',         tier:5, price:500000, image:'https://upload.wikimedia.org/wikipedia/commons/7/74/20191207_Lake_Pichola%2C_City_Palace%2C_Udaipur%2C_1516_7254.jpg',       desc:'Gold domed ceilings, mirror mosaics and hand-carved marble. Lake-view private pool.' },
+  { id:'jaipur-premier',       hotel:'hotels-in-jaipur-rajvilas-resort',   name:'Premier Room',                            tier:2, price:50000,  image:'https://upload.wikimedia.org/wikipedia/commons/f/f7/Jaipur_03-2016_02_Amber_Fort.jpg',                                     desc:'Four-poster bed, cushioned window seat, courtyard bathtub views and walk-in wardrobe.' },
+  { id:'jaipur-pool',          hotel:'hotels-in-jaipur-rajvilas-resort',   name:'Premier Room with Private Pool',          tier:3, price:110000, image:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Swimming_pool_of_Khan_Pool_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg', desc:'Temperature-controlled private pool, outdoor dining, four-poster bed and sunken marble bathtub.' },
+  { id:'jaipur-kohinoor',      hotel:'hotels-in-jaipur-rajvilas-resort',   name:'Kohinoor Villa with Private Pool',        tier:5, price:550000, image:'https://upload.wikimedia.org/wikipedia/commons/f/f7/Jaipur_03-2016_02_Amber_Fort.jpg',                                     desc:'Three buildings with two en-suite bedrooms, a grand lounge-dining space and large pool.' },
+  { id:'mumbai-premier',       hotel:'hotels-in-mumbai',                   name:'Premier Room',                            tier:1, price:38000,  image:'https://upload.wikimedia.org/wikipedia/commons/0/0e/Mumbai_03-2016_46_evening_at_Marine_Drive.jpg',                        desc:'City views with walk-in wardrobe and standalone bathtub.' },
+  { id:'mumbai-ocean',         hotel:'hotels-in-mumbai',                   name:'Premier Ocean View Room',                 tier:2, price:65000,  image:'https://upload.wikimedia.org/wikipedia/commons/0/0e/Mumbai_03-2016_46_evening_at_Marine_Drive.jpg',                        desc:'King or twin bed facing the Arabian Sea. Floor-to-ceiling ocean views.' },
+  { id:'mumbai-bay-suite',     hotel:'hotels-in-mumbai',                   name:'Bay View Suite',                          tier:3, price:130000, image:'https://upload.wikimedia.org/wikipedia/commons/0/0e/Mumbai_03-2016_46_evening_at_Marine_Drive.jpg',                        desc:'King bed with elegant living room, 24-hour butler and stunning harbour views.' },
+  { id:'mumbai-kohinoor',      hotel:'hotels-in-mumbai',                   name:'Kohinoor Suite',                          tier:5, price:450000, image:'https://upload.wikimedia.org/wikipedia/commons/0/0e/Mumbai_03-2016_46_evening_at_Marine_Drive.jpg',                        desc:'Superlative views, private living area, powder room and private butler entrance.' },
+  { id:'rantham-tent',         hotel:'hotels-in-ranthambhore-vanyavilas-resort', name:'Luxury Tent',                       tier:2, price:65000,  image:'https://upload.wikimedia.org/wikipedia/commons/1/18/Tiger_at_Ranthambhore_National_Park_01.jpg',                          desc:'Royal caravan-inspired tent with canopied king bed, teak floors and claw-footed bathtub.' },
+  { id:'rantham-tent-pool',    hotel:'hotels-in-ranthambhore-vanyavilas-resort', name:'Luxury Tent with Private Pool',     tier:4, price:120000, image:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Swimming_pool_of_Khan_Pool_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg', desc:'129 sqm interior combining tented elegance with a private temperature-controlled pool.' },
+  { id:'rantham-royal',        hotel:'hotels-in-ranthambhore-vanyavilas-resort', name:'Royal Tent with Private Pool',      tier:5, price:220000, image:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Swimming_pool_of_Khan_Pool_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg', desc:'Two expansive tents with temperature-controlled pool, central courtyard and bonfire lounge.' },
+  { id:'blr-deluxe',           hotel:'hotels-in-bengaluru',                name:'Deluxe Room with Balcony',                tier:1, price:25000,  image:'https://upload.wikimedia.org/wikipedia/commons/e/e9/Lalbagh%2C_Bengaluru-6.jpg',                                            desc:'Queen bed, garden-view balcony and writing desk.' },
+  { id:'blr-premier',          hotel:'hotels-in-bengaluru',                name:'Premier Room with Balcony',               tier:2, price:40000,  image:'https://upload.wikimedia.org/wikipedia/commons/e/e9/Lalbagh%2C_Bengaluru-6.jpg',                                            desc:'King bed, walk-in wardrobe, private balcony and bathroom with steam facility.' },
+  { id:'blr-presidential',     hotel:'hotels-in-bengaluru',                name:'Presidential Suite with Terrace',         tier:5, price:250000, image:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Swimming_pool_of_Khan_Pool_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg', desc:'Grand private terrace, living-dining area, powder room and Italian marble bathroom.' },
+];
+var DINING = [
+  { hotel:'hotels-in-agra-amarvilas-resort',    name:'Esphahan',             price:4500, desc:'Signature Indian restaurant serving Mughal-era recipes with live traditional music. Taj Mahal views by night.',             image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-agra-amarvilas-resort',    name:'Bellevue',             price:4000, desc:'International and Indian cuisine with curated tasting menus and wine pairings. Floor-to-ceiling Taj Mahal views.',           image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-delhi',                    name:'Dhilli',               price:5500, desc:'Modern Indian cuisine mentored by Michelin-starred Chef Vineet Bhatia MBE. Menu rooted in Delhi\'s culinary traditions.',    image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-delhi',                    name:'Baoshuan',             price:5000, desc:'Chinese cuisine and dim sum mentored by two-Michelin-starred Chef Andrew Wong. Voted among Asia\'s best restaurants.',       image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-delhi',                    name:'Cirrus 9',             price:2500, desc:'Rooftop al fresco bar with cocktails and views of Delhi Golf Course and Humayun\'s Tomb. The perfect sundowner venue.',      image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-udaipur-udaivilas-resort', name:'Mewar by Vineet',      price:5500, desc:'Traditional Mewar flavours reimagined by Chef Vineet Bhatia. Set in a romantic lakeside pavilion with City Palace views.',   image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-udaipur-udaivilas-resort', name:'The Promenade',        price:2000, desc:'Lakeside sundowner bar with panoramic City Palace and Lake Pichola views. Signature cocktails at golden hour.',              image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-jaipur-rajvilas-resort',   name:'Raj Mahal',            price:5000, desc:'Indian specialty restaurant serving dinner in a regal setting. Traditional recipes from the royal kitchens of Rajasthan.',   image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-jaipur-rajvilas-resort',   name:'Rajwada Library Bar',  price:2000, desc:'Intimate bar with chess, backgammon and classic books. Aperitifs and nightcaps in regal Maharaja surroundings.',            image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-mumbai',                   name:'Ziya',                 price:5500, desc:'Modern Indian cuisine mentored by Michelin-starred Chef Vineet Bhatia. Celebrating India\'s culinary heritage.',             image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-mumbai',                   name:'The Eau Bar',          price:2500, desc:'Art-deco rooftop bar with panoramic ocean views. Craft cocktails and small plates above Marine Drive.',                     image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-ranthambhore-vanyavilas-resort', name:'The Dining Room',price:4000, desc:'International and Rajasthani cuisine served in a high-ceilinged hall or courtyard with bonfire and live folk music.',        image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-bengaluru',                name:'Wabi Sabi',            price:4000, desc:'Contemporary Japanese and traditional Chinese cuisine in a zen atmosphere with a waterfall soundscape.',                     image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+  { hotel:'hotels-in-bengaluru',                name:'Rim Naam',             price:3500, desc:'Authentic Thai cuisine served in a garden pavilion set over water with traditional Thai music performances.',                image:'https://upload.wikimedia.org/wikipedia/commons/2/22/Brook_%26_Pines_Restaurant%2C_Microbrewery_%26_Grill_%28Kasauli%29.jpg' },
+];
+var SPA = [
+  { hotel:'hotels-in-agra-amarvilas-resort',    name:'Couples Taj Treatment',          price:15000, desc:'A romantic couples experience with Taj Mahal views. Eastern and Western therapies including warm herbal compress.',          image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-agra-amarvilas-resort',    name:'Eastern Massage 60 min',         price:8000,  desc:'Traditional Eastern massage technique targeting deep tissue tension. Uses warm aromatic oils tailored to your body type.',    image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-delhi',                    name:'Asmi Signature Body Journey',    price:12000, desc:'A transformative bodywork session rooted in Pancha Kosha philosophy. Combines breathwork, movement and therapeutic massage.',  image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-delhi',                    name:'Asmi Couples Renewal Ritual',    price:20000, desc:'An immersive couples experience spanning movement, nutrition guidance, bodywork and mindfulness. Half-day retreat.',           image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-udaipur-udaivilas-resort', name:'Asmi Lakeside Couples Retreat',  price:22000, desc:'A signature couples experience by Lake Pichola. Eastern bodywork, aromatic baths and private lakeside meditation.',            image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-udaipur-udaivilas-resort', name:'Asmi Rajasthan Heritage Massage',price:10000, desc:'Traditional Rajasthani warm herbal poultice massage followed by Indian head and scalp therapy.',                              image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-jaipur-rajvilas-resort',   name:'Asmi Rajput Romance',            price:18000, desc:'Warm herbal poultice massage followed by a relaxing facial and Indian head massage. A classic Rajput couples ritual.',         image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-jaipur-rajvilas-resort',   name:'Asmi Garden Yoga and Meditation',price:4500,  desc:'Morning garden yoga session with gentle postures, breathing exercises and guided chanting.',                                   image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-mumbai',                   name:'Signature Ocean Ritual',         price:12000, desc:'A restorative full-body treatment inspired by the Arabian Sea. Marine mineral wrap followed by deep relaxation massage.',      image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-mumbai',                   name:'Couples Sanctuary',              price:15000, desc:'Side-by-side couples treatment in a private suite. Foot ritual, synchronised full-body massage and shared steam bath.',        image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-ranthambhore-vanyavilas-resort', name:'Romance of Vanyavilas',    price:20000, desc:'Signature couples treatment using rare attar oils and kasa singing bowls. Concludes with the signature dhara warm aromatic flow.',image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-bengaluru',                name:'City Escape Ritual',             price:9000,  desc:'A head-to-toe restorative experience for the urban traveller. Scalp massage, full-body treatment and personalised facial.',   image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+  { hotel:'hotels-in-bengaluru',                name:'Couples Sanctuary',              price:16000, desc:'A private couples suite with synchronised massage, shared aromatherapy bath and post-treatment tea ceremony.',                image:'https://upload.wikimedia.org/wikipedia/commons/d/d9/YHI_Spa_treatment_room_at_Paradisus_by_Meli%C3%A1_Bali.jpg' },
+];
+
+function fmt(n) { return '₹' + n.toLocaleString('en-IN'); }
+function getHotelById(id) { return HOTELS.find(function(h){ return h.id === id; }); }
+function getByHotel(arr, hid) { return arr.filter(function(x){ return x.hotel === hid; }); }
+
+var hotelId = new URLSearchParams(window.location.search).get('id');
+var hotel   = hotelId ? getHotelById(hotelId) : null;
+
+if (!hotel) {
+  document.getElementById('hero-name').textContent = 'Hotel not found';
+} else {
+  // ── Populate hero ──────────────────────────────────────────────────────
+  document.title              = hotel.name + ' — Mojo Hotel Group';
+  document.getElementById('hero-bg').style.backgroundImage = 'url(' + hotel.image + ')';
+  document.getElementById('hero-type').textContent   = hotel.type;
+  document.getElementById('hero-name').textContent   = hotel.name;
+  document.getElementById('hero-loc').textContent    = hotel.city + ', India';
+  document.getElementById('hero-region').textContent = hotel.region;
+  document.getElementById('hero-price').textContent  = fmt(hotel.price);
+
+  // ── Populate about ─────────────────────────────────────────────────────
+  document.getElementById('about-img').src    = hotel.image;
+  document.getElementById('about-img').alt    = hotel.name;
+  document.getElementById('about-title').textContent = hotel.name;
+  document.getElementById('about-desc').textContent  = hotel.desc;
+
+  var hotelRooms  = getByHotel(ROOMS,  hotelId);
+  var hotelDining = getByHotel(DINING, hotelId);
+  var hotelSpa    = getByHotel(SPA,    hotelId);
+
+  document.getElementById('stat-rooms').textContent  = hotelRooms.length  || '—';
+  document.getElementById('stat-dining').textContent = hotelDining.length || '—';
+  document.getElementById('stat-spa').textContent    = hotelSpa.length    || '—';
+
+  // ── Rooms ──────────────────────────────────────────────────────────────
+  var rGrid = document.getElementById('rooms-grid');
+  rGrid.innerHTML = '';
+  if (hotelRooms.length === 0) {
+    rGrid.innerHTML = '<div class="empty">Room details coming soon.</div>';
+  } else {
+    // Sort by tier
+    hotelRooms.sort(function(a,b){ return a.tier - b.tier; });
+    hotelRooms.forEach(function(r, i) {
+      var isUpgrade = i > 0; // all except cheapest get an "upgrade" badge
+      var div = document.createElement('div');
+      div.className = 'room-card';
+      var tierDots = '';
+      for (var t=1; t<=5; t++) tierDots += '<div class="tier-dot'+(t<=r.tier?' on':'')+'"></div>';
+      div.innerHTML = `
+        <div class="room-img"><img src="${r.image}" alt="${r.name}" loading="lazy"></div>
+        <div class="room-body">
+          ${isUpgrade ? '<div class="upgrade-badge">Upgrade Available</div>' : ''}
+          <div class="room-tier">${tierDots}</div>
+          <div class="room-name">${r.name}</div>
+          <div class="room-desc">${r.desc}</div>
+          <div class="room-footer">
+            <div class="room-price">From <strong>${fmt(r.price)}</strong>/night</div>
+            <button class="book-room">Book</button>
+          </div>
+        </div>`;
+      rGrid.appendChild(div);
+    });
+  }
+
+  // ── Dining ─────────────────────────────────────────────────────────────
+  var dGrid = document.getElementById('dining-grid');
+  dGrid.innerHTML = '';
+  if (hotelDining.length === 0) {
+    dGrid.innerHTML = '<div class="empty">Dining information coming soon.</div>';
+  } else {
+    hotelDining.forEach(function(d) {
+      var div = document.createElement('div');
+      div.className = 'dining-card';
+      div.innerHTML = `
+        <div class="dining-img"><img src="${d.image}" alt="${d.name}" loading="lazy"></div>
+        <div class="dining-body">
+          <div class="dining-name">${d.name}</div>
+          <div class="dining-price">Avg cover ${fmt(d.price)}</div>
+          <div class="dining-desc">${d.desc}</div>
+        </div>`;
+      dGrid.appendChild(div);
+    });
+  }
+
+  // ── Spa ────────────────────────────────────────────────────────────────
+  var sGrid = document.getElementById('spa-grid');
+  sGrid.innerHTML = '';
+  if (hotelSpa.length === 0) {
+    sGrid.innerHTML = '<div class="empty" style="color:rgba(255,255,255,.3)">Spa information coming soon.</div>';
+  } else {
+    hotelSpa.forEach(function(s) {
+      var div = document.createElement('div');
+      div.className = 'spa-card';
+      div.innerHTML = `
+        <div class="spa-img"><img src="${s.image}" alt="${s.name}" loading="lazy"></div>
+        <div class="spa-body">
+          <div class="spa-name">${s.name}</div>
+          <div class="spa-price">${fmt(s.price)}</div>
+          <div class="spa-desc">${s.desc}</div>
+        </div>`;
+      sGrid.appendChild(div);
+    });
+  }
+
+}
+
+// ── Sign in
+function showSignIn(e) {
+  e.preventDefault();
+  var email = prompt('Enter your email address to sign in:');
+  if (email && email.includes('@')) {
+    alert('Welcome back! You are now signed in as ' + email);
+  }
+}
+
+</script>
+
+<script type='text/javascript'>
+    function initEmbeddedMessaging() {
+        try {
+            embeddedservice_bootstrap.settings.language = 'en_US';
+            embeddedservice_bootstrap.init(
+                '00Dfj00000flsNk',
+                'Service_Agent_Channel',
+                'https://trailsignup-8abfaa1f7d18d0.my.site.com/ESWServiceAgentChannel1790335805223',
+                {
+                    scrt2URL: 'https://trailsignup-8abfaa1f7d18d0.my.salesforce-scrt.com'
+                }
+            );
+        } catch (err) {
+            console.error('Error loading Embedded Messaging: ', err);
+        }
+    };
+</script>
+<script type='text/javascript' src='https://trailsignup-8abfaa1f7d18d0.my.site.com/ESWServiceAgentChannel1790335805223/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+</body>
+</html>
