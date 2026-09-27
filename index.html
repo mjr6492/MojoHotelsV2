@@ -412,22 +412,36 @@ function footerSubscribe() {
         }
     }
 
-    function attachToChatButton() {
+    // Method 1: Salesforce lifecycle event fired when user clicks the chat button
+    window.addEventListener('onEmbeddedMessagingButtonClicked', logAnonId);
+
+    // Method 2: find button in light DOM or shadow DOM
+    var attached = false;
+    function findAndAttach() {
+        if (attached) return;
+        // light DOM
         var btn = document.querySelector('.embeddedMessagingConversationButton');
-        if (btn) {
-            btn.addEventListener('click', logAnonId);
-            return true;
+        // shadow DOM fallback
+        if (!btn) {
+            document.querySelectorAll('*').forEach(function(el) {
+                if (!btn && el.shadowRoot) {
+                    btn = el.shadowRoot.querySelector('.embeddedMessagingConversationButton');
+                }
+            });
         }
-        return false;
+        if (btn) {
+            attached = true;
+            btn.addEventListener('click', logAnonId);
+            console.log('Chat button found, anonymous ID will log on click');
+        }
     }
 
     window.addEventListener('onEmbeddedMessagingReady', function() {
-        if (!attachToChatButton()) {
-            var observer = new MutationObserver(function(_, obs) {
-                if (attachToChatButton()) obs.disconnect();
-            });
-            observer.observe(document.body, { childList: true, subtree: true });
-        }
+        console.log('Embedded Messaging Ready');
+        setTimeout(findAndAttach, 300);
+        var obs = new MutationObserver(function() { findAndAttach(); });
+        obs.observe(document.body, { childList: true, subtree: true });
+        setTimeout(function() { obs.disconnect(); }, 15000);
     });
 })();
 </script>
